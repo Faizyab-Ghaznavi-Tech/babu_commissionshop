@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { FullPageLoader } from '@/components/States';
+import { isSupabaseConfigured } from '@/lib/supabase';
 
 // Public pages
 import { HomePage } from '@/pages/public/HomePage';
@@ -61,6 +62,27 @@ function AppRoutes() {
 }
 
 function App() {
+  if (!isSupabaseConfigured) {
+    return (
+      <main className="min-h-screen bg-cream px-4 py-16 text-date-900">
+        <section className="mx-auto max-w-2xl rounded-2xl border border-date-200 bg-white p-8 shadow-sm sm:p-10">
+          <p className="text-sm font-semibold uppercase tracking-widest text-date-500">
+            Local setup required
+          </p>
+          <h1 className="mt-3 text-3xl font-semibold">Connect your Supabase project</h1>
+          <p className="mt-4 leading-7 text-date-700">
+            The app is running, but its Supabase credentials are missing. Copy <code>.env.example</code> to <code>.env.local</code>,
+            then add your project URL and anon key.
+          </p>
+          <p className="mt-4 leading-7 text-date-700">
+            You can find both values in your Supabase project under <strong>Project Settings → API</strong>.
+            Restart the dev server after saving the file.
+          </p>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <AuthProvider>
       <BrowserRouter>
